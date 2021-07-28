@@ -48,6 +48,8 @@ mysql开启远程访问权限：
     grant all privileges  on *.* to root@'%' identified by "123456";
     flush privileges;
 
+SQL ：left join 时on写左表条件无效，写右表条件会过滤右表数据;Right join 同理
+
 hue安装：依赖安装后make apps报错->使用PREFIX=/opt/install/ make install
     启动后报错 OperationalError: attempt to write a readonly database
     需要创建hue用户，并将/usr/local/hue、/var/log/hue (编译hue的路径)目录的所有权交给hue用户
@@ -78,8 +80,8 @@ hue集成hive的坑：
 hive 常用属性配置
     hive导入未分区数据到分区表
         #开启动态分区设置
-        set hive.exec.dynamic.partition =true
-        set hive.exec.dynamic.partition.mode = nonstrict
+        set hive.exec.dynamic.partition =true;
+        set hive.exec.dynamic.partition.mode = nonstrict;
         #
         set hive.exec.max.dynamic.partitions.pernode=1000;
         set hive.exec.max.dynamic.partitions=10000;
@@ -87,6 +89,17 @@ hive 常用属性配置
         # lzo压缩 hive执行insert表操作插入数据时前执行
         SET hive.exec.compress.output=true;
         SET mapred.output.compression.codec=com.hadoop.compression.lzo.LzopCodec; 
+        #设置MapReduce提交队列
+        set mapreduce.job.queuename=dev;
+        hive开启本地模式：
+            set hive.exec.mode.local.auto=true;
+            # 设置输入数据小于该值，使用本地模式 52428800:50MB  134217728:128MB
+            set hive.exec.mode.local.auto.inputbytes.max=134217728;
+            # 设置maptask个数小于5使用本地模式
+            set hive.exec.mode.local.auto.input.files.max=5;        
+        解决map阶段GC问题：
+            set mapreduce.map.java.opts =-Xmx10240m;
+
 
     数据倾斜调优
     hive.groupby.skewindata=true 数据倾斜时负载均衡，当选项设定为true，生成的查询计划会有两个MRJob。
@@ -99,12 +112,7 @@ hive 常用属性配置
     
     
     
-    hive开启本地模式：
-        set hive.exec.mode.local.auto=true;
-        -- 设置输入数据小于该值，使用本地模式 52428800:50MB  134217728:128MB
-        set hive.exec.mode.local.auto.inputbytes.max=134217728;
-        -- 设置maptask个数小于5使用本地模式
-        set hive.exec.mode.local.auto.input.files.max=5;        
+
         
 hive 分区操作
     # 删除时间范围分区：
@@ -144,6 +152,12 @@ hive强大的系统函数：
     collect系列：hive group by 的列必须在select 后，使用collect可以取出不在select 后的列值
         collect_list：将分组中的某列转为一个数组返回(不去重)
         collect_set：将分组中的某列转为一个数组返回(去重)
+
+hive修改列：
+    将col1 修改为 col2 放在 col3 后面：
+      alter table test_table change col1 col2 string COMMENT '' after col3;
+    添加列：
+      ALTER TABLE test_table ADD COLUMNS (dept STRING COMMENT 'Department name');
 
 编译Hadoop2.8.5源码
     1.安装maven
