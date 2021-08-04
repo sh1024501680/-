@@ -152,10 +152,12 @@ hive强大的系统函数：
     collect系列：hive group by 的列必须在select 后，使用collect可以取出不在select 后的列值
         collect_list：将分组中的某列转为一个数组返回(不去重)
         collect_set：将分组中的某列转为一个数组返回(去重)
+    str_to_map() 可以把字符串转为map类型
+      e.g.  str_to_map(concat_ws(',',concat('id',':',a.id),concat('code',':',a.code)))
 
 hive修改列：
     将col1 修改为 col2 放在 col3 后面：
-      alter table test_table change col1 col2 string COMMENT '' after col3;
+      alter table test_table change column col1 col2 string COMMENT '' after col3;
     添加列：
       ALTER TABLE test_table ADD COLUMNS (dept STRING COMMENT 'Department name');
 
@@ -357,6 +359,21 @@ Tomcat:首页host-manager无法访问时，修改webapps/host-manager/META-INF/c
         allow="^.*$"
     
 linux：
+    安装：
+        分区配置：/boot  300/400 MB
+                  swap   虚拟机内存*2
+                  /      剩余所有空间
+    
+    centos7 扩展磁盘空间(将sda1扩展到根)
+    格式化  1) pvcreate /dev/sda1
+            2) vgextend centos /dev/sda1
+            3) lvextend -L +1GB /dev/mapper/centos-root
+            4) xfs_growfs /dev/mapper/centos-root
+
+
+
+
+
     sed -n  '1,3p' file.txt  打印 file.txt 文件第1到3行包含1,3
 
     替换/home下所有文件中的aaa为bbb
