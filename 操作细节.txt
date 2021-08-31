@@ -379,6 +379,8 @@ linux：
     替换/home下所有文件中的aaa为bbb
 　　sed -i "s/aaa/bbb/g" `grep aaa -rl /home`
 
+    vim 中命令模式  :s/aaa/bbb/g  替换文件中所以的aaa为bbb
+
     rz 命令安装：yum install -y lrzsz 
         swappiness值的大小对如何使用swap分区是有着很大的联系。swappiness=0的时候表示
     最大限度使用物理内存，然后才是 swap空间，swappiness＝100的时候表示积极的使用swap
@@ -410,7 +412,7 @@ linux：
         DATE=`date +%w`
         if [ $(($DATE+0)) -ne 1 ]
         then
-          echo "不是1号,退出"
+          echo "不是周一,退出"
           exit 0
         fi
     centos7防火墙操作：
