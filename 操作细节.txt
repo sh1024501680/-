@@ -281,6 +281,9 @@ Hadoop程序在Windows下运行报错：org.apache.hadoop.io.nativeio.NativeIO$W
     after() - 在被选元素之后插入内容
     before() - 在被选元素之前插入内容
     
+js解码url地址中文：
+    decodeURI(param)
+
 类型转换、参数判断一般写view层
 action/controller一般要将所有的异常捕获返回错误信息
 
@@ -370,7 +373,8 @@ linux：
             3) lvextend -L +1GB /dev/mapper/centos-root
             4) xfs_growfs /dev/mapper/centos-root
 
-
+    查看端口被占用：netstat -anp | grep 8080
+        tcp6       0      0 :::8080                 :::*                    LISTEN      1999/java
 
 
 
